@@ -1,4 +1,9 @@
+## README.md
+Using unet to predict the next image in a sequence. Starting very simple with a 2x2 square moving in a straight line across the 16x16 field. Training data is sequences of images. The input is image @ t=n and the target is the image @ t=n+1, one time slot later.
 
+Then will add more complex motions 2-step motions (ie, one left then one down, repeat). Then 3 step motions. Then add in more shapes.
+
+## From here down is usuyama's README.md
 # UNet/FCN PyTorch [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/usuyama/pytorch-unet/blob/master/pytorch_unet_resnet18_colab.ipynb) 
 
 This repository contains simple PyTorch implementations of U-Net and FCN, which are deep learning segmentation methods proposed by Ronneberger et al. and Long et al.
