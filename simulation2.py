@@ -1,30 +1,51 @@
 import numpy as np
 import random
 
-def generate_random_data(height, width, count):
-    x= []
-    for i in range(0, count):
-        x.append(generate_img(height, width))
-    X = np.asarray(x) * 255
-    X = X.repeat(3, axis=1).transpose([0, 2, 3, 1]).astype(np.uint8)
-
-# generate_track takes an x,y starting point and an array of x,y increments and a count
-# it returns an array of x,y points. If the count is more than the number of increments, the increments are repeated
-def generate_track(x,y,increments,count):
+# generate_track takes an x,y starting point and an array of x,y steps and a count
+# it returns an array of x,y points. If the count is more than the number of steps, the steps are repeated
+def generate_track(x,y,steps,count):
     track = []
-    print("increments len=", len(increments))
+    print("steps len=", len(steps))
     for i in range(0, count):
         track.append((x,y))
-        x += increments[i % len(increments)][0]
-        y += increments[i % len(increments)][1]
+        x += steps[i % len(steps)][0]
+        y += steps[i % len(steps)][1]
     return track
+
+# Generate a sequence of images from a track
+def generate_image_sequence(track, height, width, x0, y0):
+    sequence = []
+    x = x0
+    y = y0
+    for i in range(0, len(track)):
+        x = x + track[i][0]
+        y = y + track[i][1]
+        # If x or y is out of bounds, stop
+        if x < 0 or x >= width or y < 0 or y >= height:
+            print("Out of bounds at ", x, y, "for image ", i)
+            break
+        sequence.append(generate_img(height, width, x, y))
+    return sequence
 
 # plot_track takes an array of x,y points and plots them
 def plot_track(track):
     plt.plot(track[:,0], track[:,1])
     plt.show()
 
-def generate_img(height, width):
+
+def generate_img(height, width, x, y):
+    # For now, just a single square
+    size = 4
+    square_location = (x, y, size)
+    
+    # Create input image
+    arr = np.zeros((height, width), dtype=bool)
+    arr = add_filled_square(arr, *square_location)
+    arr = np.reshape(arr, (1, height, width)).astype(np.float32)
+
+    return arr
+
+def generate_img_orig(height, width):
     shape = (height, width)
 
     triangle_location = get_random_location(*shape)
